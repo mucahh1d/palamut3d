@@ -6,6 +6,7 @@ import { OrbitControls } from "@react-three/drei";
 import { useState, useRef, useMemo, Suspense, useEffect, useCallback } from "react";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 
 // ============================================
 // PROSEDÜREL NOISE TEXTURE OLUŞTURUCU
@@ -202,7 +203,7 @@ function addUVMapping(geometry) {
 // ============================================
 // STL MODEL BİLEŞENİ
 // ============================================
-function STLModel({ file, amplitude, scale, showWireframe, remeshQuality }) {
+function STLModel({ file, amplitude, scale, showWireframe, remeshQuality, onGeometryReady }) {
   const [geometry, setGeometry] = useState(null);
   const [loading, setLoading] = useState(false);
   
@@ -249,6 +250,11 @@ function STLModel({ file, amplitude, scale, showWireframe, remeshQuality }) {
         
         setGeometry(remeshResult.geometry);
         setLoading(false);
+        
+        // Parent'a geometry'yi bildir
+        if (onGeometryReady) {
+          onGeometryReady(remeshResult.geometry);
+        }
       } catch (error) {
         console.error(" STL yükleme hatası:", error);
         setLoading(false);
@@ -307,16 +313,63 @@ export default function Home() {
   const [remeshQuality, setRemeshQuality] = useState(2);
   const [stlFile, setStlFile] = useState(null);
   const [showWireframe, setShowWireframe] = useState(false);
+  const [currentGeometry, setCurrentGeometry] = useState(null);
+  const [exportStatus, setExportStatus] = useState('');
   const fileInputRef = useRef(null);
 
   const handleFileChange = useCallback((e) => {
     const file = e.target.files?.[0];
     if (file && (file.name.endsWith('.stl') || file.name.endsWith('.STL'))) {
       setStlFile(file);
+      setExportStatus('');
     } else {
-      alert('⚠️ Lütfen geçerli bir STL dosyası seçin!');
+      alert('️ Lütfen geçerli bir STL dosyası seçin!');
     }
   }, []);
+
+  const handleGeometryReady = useCallback((geometry) => {
+    setCurrentGeometry(geometry);
+  }, []);
+
+  // STL EXPORT FONKSİYONU
+  const handleExportSTL = useCallback(() => {
+    if (!currentGeometry) {
+      alert('⚠️ Önce bir STL dosyası yükleyin!');
+      return;
+    }
+    
+    try {
+      setExportStatus(' Export ediliyor...');
+      
+      const exporter = new STLExporter();
+      const mesh = new THREE.Mesh(currentGeometry);
+      
+      // STL olarak export et (binary format)
+      const stlString = exporter.parse(mesh, { binary: true });
+      
+      // Blob oluştur ve indir
+      const blob = new Blob([stlString], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `palamut3d_${Date.now()}.stl`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      setExportStatus('✅ İndirme tamamlandı!');
+      console.log(' STL başarıyla export edildi');
+      
+      // 3 saniye sonra mesajı temizle
+      setTimeout(() => setExportStatus(''), 3000);
+    } catch (error) {
+      console.error(' Export hatası:', error);
+      setExportStatus('❌ Export başarısız!');
+      setTimeout(() => setExportStatus(''), 3000);
+    }
+  }, [currentGeometry]);
 
   return (
     <main className="min-h-screen bg-gray-950 text-white flex flex-col">
@@ -324,9 +377,9 @@ export default function Home() {
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
             <h1 className="text-xl font-bold tracking-tight text-cyan-400">
-              Palamut3D <span className="text-gray-500 text-sm font-mono">v1.1.0</span>
+              Palamut3D <span className="text-gray-500 text-sm font-mono">v1.2.0</span>
             </h1>
-            <p className="text-xs text-gray-400 mt-1">by roottechx | Profesyonel Remeshing</p>
+            <p className="text-xs text-gray-400 mt-1">by roottechx | STL Export Aktif</p>
           </div>
           <button
             onClick={() => setShowWireframe(!showWireframe)}
@@ -351,6 +404,7 @@ export default function Home() {
                 scale={scale}
                 showWireframe={showWireframe}
                 remeshQuality={remeshQuality}
+                onGeometryReady={handleGeometryReady}
               />
             </Suspense>
             
@@ -362,11 +416,12 @@ export default function Home() {
             <p>• Adaptif subdivision (kenar bazlı)</p>
             <p>• Maksimum 400k vertex limiti</p>
             <p>• Smooth noise texture</p>
-            <p>• Otomatik UV mapping</p>
+            <p>• STL Export aktif</p>
           </div>
         </div>
 
         <aside className="w-80 bg-gray-900 border-l border-gray-800 p-6 space-y-6 overflow-y-auto">
+          {/* DOSYA YÜKLEME */}
           <div>
             <h2 className="text-sm font-bold text-gray-300 mb-4">📁 DOSYA YÜKLEME</h2>
             
@@ -391,6 +446,34 @@ export default function Home() {
             )}
           </div>
 
+          {/* STL EXPORT */}
+          <div className="pt-4 border-t border-gray-800">
+            <h2 className="text-sm font-bold text-gray-300 mb-4">💾 STL EXPORT</h2>
+            
+            <button
+              onClick={handleExportSTL}
+              disabled={!currentGeometry}
+              className={`w-full py-3 px-4 rounded-lg text-sm font-medium transition ${
+                currentGeometry 
+                  ? 'bg-green-600 hover:bg-green-700 text-white' 
+                  : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {currentGeometry ? ' STL İndir' : '⏸️ Model Yok'}
+            </button>
+            
+            {exportStatus && (
+              <p className="text-xs mt-2 text-center font-mono">
+                {exportStatus}
+              </p>
+            )}
+            
+            <p className="text-xs text-gray-500 mt-2">
+              💡 İşlenmiş modeli STL olarak indir
+            </p>
+          </div>
+
+          {/* REMESHING KALİTESİ */}
           <div className="pt-4 border-t border-gray-800">
             <h2 className="text-sm font-bold text-gray-300 mb-4">🔧 REMESHING KALİTESİ</h2>
             
@@ -416,8 +499,9 @@ export default function Home() {
             </div>
           </div>
 
+          {/* KABARTMA KONTROLLERİ */}
           <div className="pt-4 border-t border-gray-800">
-            <h2 className="text-sm font-bold text-gray-300 mb-4"> KABARTMA KONTROLLERİ</h2>
+            <h2 className="text-sm font-bold text-gray-300 mb-4">🎨 KABARTMA KONTROLLERİ</h2>
             
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
