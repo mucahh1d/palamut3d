@@ -9,14 +9,12 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 
 // ============================================
-// PRESET TEXTURE OLUŞTURUCULAR
+// 25 PRESET TEXTURE FONKSİYONLARI
 // ============================================
 const PRESETS = {
   sepet: (ctx, s) => {
-    ctx.fillStyle = "#808080";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#404040";
-    ctx.lineWidth = 3;
+    ctx.fillStyle = "#808080"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#404040"; ctx.lineWidth = 3;
     for (let i = 0; i < s; i += 16) {
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, s); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(s, i); ctx.stroke();
@@ -27,10 +25,8 @@ const PRESETS = {
     }
   },
   tugla: (ctx, s) => {
-    ctx.fillStyle = "#606060";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#303030";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "#606060"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#303030"; ctx.lineWidth = 2;
     const bw = 40, bh = 20;
     for (let row = 0; row < s; row += bh) {
       const offset = (Math.floor(row / bh) % 2) * (bw / 2);
@@ -42,21 +38,16 @@ const PRESETS = {
     }
   },
   balon: (ctx, s) => {
-    ctx.fillStyle = "#202020";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#202020"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 30; i++) {
       const x = Math.random() * s, y = Math.random() * s, r = 10 + Math.random() * 20;
       const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-      grad.addColorStop(0, "#ffffff");
-      grad.addColorStop(0.7, "#808080");
-      grad.addColorStop(1, "#202020");
-      ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      grad.addColorStop(0, "#ffffff"); grad.addColorStop(0.7, "#808080"); grad.addColorStop(1, "#202020");
+      ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
     }
   },
   karbon: (ctx, s) => {
-    ctx.fillStyle = "#1a1a1a";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#1a1a1a"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 4) {
       for (let x = 0; x < s; x += 4) {
         const offset = (Math.floor(y / 4) % 2) * 2;
@@ -66,19 +57,16 @@ const PRESETS = {
     }
   },
   kristal: (ctx, s) => {
-    ctx.fillStyle = "#404040";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#404040"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 50; i++) {
       const x = Math.random() * s, y = Math.random() * s, size = 5 + Math.random() * 15;
       ctx.fillStyle = `rgba(${150 + Math.random() * 105}, ${150 + Math.random() * 105}, ${150 + Math.random() * 105}, 0.7)`;
-      ctx.beginPath();
-      ctx.moveTo(x, y - size); ctx.lineTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x - size, y);
+      ctx.beginPath(); ctx.moveTo(x, y - size); ctx.lineTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x - size, y);
       ctx.closePath(); ctx.fill();
     }
   },
   noktalar: (ctx, s) => {
-    ctx.fillStyle = "#202020";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#202020"; ctx.fillRect(0, 0, s, s);
     ctx.fillStyle = "#ffffff";
     for (let y = 0; y < s; y += 16) {
       for (let x = 0; x < s; x += 16) {
@@ -87,18 +75,15 @@ const PRESETS = {
     }
   },
   izgara: (ctx, s) => {
-    ctx.fillStyle = "#303030";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#808080";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "#303030"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#808080"; ctx.lineWidth = 2;
     for (let i = 0; i <= s; i += 20) {
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, s); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(s, i); ctx.stroke();
     }
   },
   kavrama: (ctx, s) => {
-    ctx.fillStyle = "#505050";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#505050"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 8) {
       for (let x = 0; x < s; x += 8) {
         ctx.fillStyle = ((x + y) % 16 < 8) ? "#707070" : "#303030";
@@ -107,10 +92,8 @@ const PRESETS = {
     }
   },
   altigen: (ctx, s) => {
-    ctx.fillStyle = "#404040";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#909090";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "#404040"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#909090"; ctx.lineWidth = 2;
     const hexSize = 20;
     for (let row = 0; row < s; row += hexSize * 1.5) {
       for (let col = 0; col < s; col += hexSize * Math.sqrt(3)) {
@@ -126,13 +109,11 @@ const PRESETS = {
     }
   },
   altigenler: (ctx, s) => {
-    ctx.fillStyle = "#202020";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#202020"; ctx.fillRect(0, 0, s, s);
     for (let row = 0; row < s; row += 30) {
       for (let col = 0; col < s; col += 30) {
         const x = col + (Math.floor(row / 30) % 2) * 15;
-        ctx.fillStyle = "#606060";
-        ctx.beginPath();
+        ctx.fillStyle = "#606060"; ctx.beginPath();
         for (let i = 0; i < 6; i++) {
           const angle = (Math.PI / 3) * i;
           const px = x + 12 * Math.cos(angle), py = row + 12 * Math.sin(angle);
@@ -143,10 +124,8 @@ const PRESETS = {
     }
   },
   izogrid: (ctx, s) => {
-    ctx.fillStyle = "#303030";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#808080";
-    ctx.lineWidth = 1;
+    ctx.fillStyle = "#303030"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#808080"; ctx.lineWidth = 1;
     for (let i = 0; i < s; i += 20) {
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, s); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(s, i); ctx.stroke();
@@ -154,19 +133,16 @@ const PRESETS = {
     }
   },
   orgu: (ctx, s) => {
-    ctx.fillStyle = "#505050";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#505050"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 12) {
       for (let x = 0; x < s; x += 12) {
         ctx.strokeStyle = ((x + y) % 24 < 12) ? "#909090" : "#303030";
-        ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.arc(x + 6, y + 6, 5, 0, Math.PI); ctx.stroke();
+        ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x + 6, y + 6, 5, 0, Math.PI); ctx.stroke();
       }
     }
   },
   ornek: (ctx, s) => {
-    ctx.fillStyle = "#404040";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#404040"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 16) {
       for (let x = 0; x < s; x += 16) {
         ctx.fillStyle = ((x / 16 + y / 16) % 2 === 0) ? "#707070" : "#202020";
@@ -175,24 +151,19 @@ const PRESETS = {
     }
   },
   tirtillama: (ctx, s) => {
-    ctx.fillStyle = "#303030";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#303030"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 100; i++) {
       const x = Math.random() * s, y = Math.random() * s;
-      ctx.strokeStyle = "#909090";
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#909090"; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 10, y + 5); ctx.lineTo(x + 5, y + 10); ctx.stroke();
     }
   },
   deri: (ctx, s) => {
-    ctx.fillStyle = "#505050";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#505050"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 500; i++) {
       const x = Math.random() * s, y = Math.random() * s;
       ctx.fillStyle = `rgba(${100 + Math.random() * 80}, ${100 + Math.random() * 80}, ${100 + Math.random() * 80}, 0.3)`;
-      ctx.beginPath();
-      ctx.ellipse(x, y, 3 + Math.random() * 5, 2 + Math.random() * 3, Math.random() * Math.PI, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x, y, 3 + Math.random() * 5, 2 + Math.random() * 3, Math.random() * Math.PI, 0, Math.PI * 2); ctx.fill();
     }
   },
   gurultu: (ctx, s) => {
@@ -204,22 +175,17 @@ const PRESETS = {
     ctx.putImageData(imageData, 0, 0);
   },
   cizgiler1: (ctx, s) => {
-    ctx.fillStyle = "#202020";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#808080";
-    ctx.lineWidth = 4;
+    ctx.fillStyle = "#202020"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#808080"; ctx.lineWidth = 4;
     for (let i = 0; i < s; i += 12) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, s); ctx.stroke(); }
   },
   cizgiler2: (ctx, s) => {
-    ctx.fillStyle = "#303030";
-    ctx.fillRect(0, 0, s, s);
-    ctx.strokeStyle = "#909090";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "#303030"; ctx.fillRect(0, 0, s, s);
+    ctx.strokeStyle = "#909090"; ctx.lineWidth = 2;
     for (let i = 0; i < s; i += 8) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(s, i); ctx.stroke(); }
   },
   voronoi: (ctx, s) => {
-    ctx.fillStyle = "#404040";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#404040"; ctx.fillRect(0, 0, s, s);
     const points = [];
     for (let i = 0; i < 30; i++) points.push({ x: Math.random() * s, y: Math.random() * s });
     for (let y = 0; y < s; y += 2) {
@@ -230,14 +196,12 @@ const PRESETS = {
           if (d < minDist) minDist = d;
         }
         const v = Math.min(255, minDist * 3);
-        ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
-        ctx.fillRect(x, y, 2, 2);
+        ctx.fillStyle = `rgb(${v}, ${v}, ${v})`; ctx.fillRect(x, y, 2, 2);
       }
     }
   },
   dokuma1: (ctx, s) => {
-    ctx.fillStyle = "#505050";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#505050"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 8) {
       for (let x = 0; x < s; x += 8) {
         ctx.fillStyle = ((x / 8 + y / 8) % 2 === 0) ? "#808080" : "#303030";
@@ -246,42 +210,34 @@ const PRESETS = {
     }
   },
   dokuma2: (ctx, s) => {
-    ctx.fillStyle = "#404040";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#404040"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < s; i += 6) {
-      ctx.strokeStyle = i % 12 < 6 ? "#909090" : "#202020";
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = i % 12 < 6 ? "#909090" : "#202020"; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, s); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(s, i); ctx.stroke();
     }
   },
   dokuma3: (ctx, s) => {
-    ctx.fillStyle = "#303030";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#303030"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 10) {
       for (let x = 0; x < s; x += 10) {
         ctx.fillStyle = (x + y) % 20 < 10 ? "#707070" : "#202020";
-        ctx.fillRect(x, y, 10, 5);
-        ctx.fillRect(x + 5, y + 5, 10, 5);
+        ctx.fillRect(x, y, 10, 5); ctx.fillRect(x + 5, y + 5, 10, 5);
       }
     }
   },
   ahşap1: (ctx, s) => {
-    ctx.fillStyle = "#604030";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#604030"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 50; i++) {
       ctx.strokeStyle = `rgba(${40 + Math.random() * 40}, ${20 + Math.random() * 30}, ${10 + Math.random() * 20}, 0.5)`;
-      ctx.lineWidth = 1 + Math.random() * 2;
-      ctx.beginPath();
-      const y = Math.random() * s;
-      ctx.moveTo(0, y);
+      ctx.lineWidth = 1 + Math.random() * 2; ctx.beginPath();
+      const y = Math.random() * s; ctx.moveTo(0, y);
       ctx.bezierCurveTo(s / 3, y + Math.random() * 10 - 5, 2 * s / 3, y + Math.random() * 10 - 5, s, y);
       ctx.stroke();
     }
   },
   ahşap2: (ctx, s) => {
-    ctx.fillStyle = "#806040";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#806040"; ctx.fillRect(0, 0, s, s);
     for (let y = 0; y < s; y += 2) {
       for (let x = 0; x < s; x += 2) {
         const v = Math.sin(x * 0.1) * 20 + Math.random() * 30;
@@ -291,26 +247,32 @@ const PRESETS = {
     }
   },
   ahşap3: (ctx, s) => {
-    ctx.fillStyle = "#504030";
-    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = "#504030"; ctx.fillRect(0, 0, s, s);
     for (let i = 0; i < 20; i++) {
       const y = (i / 20) * s;
       ctx.strokeStyle = `rgba(${60 + Math.random() * 40}, ${40 + Math.random() * 30}, ${20 + Math.random() * 20}, 0.7)`;
-      ctx.lineWidth = 3 + Math.random() * 5;
-      ctx.beginPath();
-      ctx.moveTo(0, y);
+      ctx.lineWidth = 3 + Math.random() * 5; ctx.beginPath(); ctx.moveTo(0, y);
       for (let x = 0; x < s; x += 20) ctx.lineTo(x, y + Math.sin(x * 0.05) * 5);
       ctx.stroke();
     }
   },
 };
 
+// Thumbnail oluştur (her preset için küçük resim)
+function createThumbnail(presetId, size = 64) {
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (PRESETS[presetId]) PRESETS[presetId](ctx, size);
+  return canvas.toDataURL();
+}
+
+// Büyük texture oluştur (3D model için)
 function createTexture(presetId) {
   const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
+  canvas.width = 512; canvas.height = 512;
   const ctx = canvas.getContext("2d");
-  if (PRESETS[presetId]) PRESETS[presetId](ctx, 256);
+  if (PRESETS[presetId]) PRESETS[presetId](ctx, 512);
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
@@ -390,9 +352,9 @@ function addUVMapping(geometry) {
 }
 
 // ============================================
-// STL MODEL
+// 3D MODEL
 // ============================================
-function STLModel({ file, amplitude, scale, showWireframe, remeshQuality, modelColor, selectedPreset, onGeometryReady }) {
+function Model3D({ file, amplitude, scale, showWireframe, remeshQuality, modelColor, selectedPreset, useCube, onGeometryReady }) {
   const [geometry, setGeometry] = useState(null);
   const [loading, setLoading] = useState(false);
   
@@ -404,33 +366,39 @@ function STLModel({ file, amplitude, scale, showWireframe, remeshQuality, modelC
   }, [scale, displacementMap]);
 
   useEffect(() => {
-    if (!file) { setGeometry(null); return; }
-    setLoading(true);
-    const loader = new STLLoader();
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const loadedGeometry = loader.parse(e.target?.result);
-        loadedGeometry.computeVertexNormals();
-        loadedGeometry.center();
-        const remeshResult = smartRemesh(loadedGeometry, remeshQuality);
-        addUVMapping(remeshResult.geometry);
-        const box = new THREE.Box3().setFromObject(new THREE.Mesh(remeshResult.geometry));
-        const size = box.getSize(new THREE.Vector3());
-        const scale_factor = 5 / Math.max(size.x, size.y, size.z);
-        remeshResult.geometry.scale(scale_factor, scale_factor, scale_factor);
-        setGeometry(remeshResult.geometry);
-        setLoading(false);
-        if (onGeometryReady) onGeometryReady(remeshResult.geometry);
-      } catch (error) { console.error("STL hatası:", error); setLoading(false); }
-    };
-    reader.readAsArrayBuffer(file);
-  }, [file, remeshQuality]);
+    if (useCube) {
+      const cubeGeometry = new THREE.BoxGeometry(5, 5, 5, 64, 64, 64);
+      addUVMapping(cubeGeometry);
+      setGeometry(cubeGeometry);
+      if (onGeometryReady) onGeometryReady(cubeGeometry);
+    } else if (file) {
+      setLoading(true);
+      const loader = new STLLoader();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const loadedGeometry = loader.parse(e.target?.result);
+          loadedGeometry.computeVertexNormals();
+          loadedGeometry.center();
+          const remeshResult = smartRemesh(loadedGeometry, remeshQuality);
+          addUVMapping(remeshResult.geometry);
+          const box = new THREE.Box3().setFromObject(new THREE.Mesh(remeshResult.geometry));
+          const size = box.getSize(new THREE.Vector3());
+          const scale_factor = 5 / Math.max(size.x, size.y, size.z);
+          remeshResult.geometry.scale(scale_factor, scale_factor, scale_factor);
+          setGeometry(remeshResult.geometry);
+          setLoading(false);
+          if (onGeometryReady) onGeometryReady(remeshResult.geometry);
+        } catch (error) { console.error("STL hatası:", error); setLoading(false); }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }, [file, remeshQuality, useCube]);
 
   if (!geometry) {
     return (
-      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[10, 10, 128, 128]} />
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[5, 5, 5, 32, 32, 32]} />
         <meshStandardMaterial color={modelColor} metalness={0.3} roughness={0.7} displacementMap={displacementMap} displacementScale={amplitude} side={THREE.DoubleSide} wireframe={showWireframe} />
       </mesh>
     );
@@ -447,6 +415,25 @@ function STLModel({ file, amplitude, scale, showWireframe, remeshQuality, modelC
 }
 
 // ============================================
+// PRESET THUMBNAIL BİLEŞENİ
+// ============================================
+function PresetThumbnail({ presetId, name, isSelected, onClick }) {
+  const thumbnailUrl = useMemo(() => createThumbnail(presetId, 64), [presetId]);
+  
+  return (
+    <button
+      onClick={onClick}
+      className={`relative w-16 h-16 rounded border-2 transition-all ${
+        isSelected ? 'border-cyan-400 ring-2 ring-cyan-400 scale-105' : 'border-gray-700 hover:border-gray-500'
+      }`}
+      title={name}
+    >
+      <img src={thumbnailUrl} alt={name} className="w-full h-full object-cover rounded" />
+    </button>
+  );
+}
+
+// ============================================
 // ANA SAYFA
 // ============================================
 export default function Home() {
@@ -459,6 +446,7 @@ export default function Home() {
   const [exportStatus, setExportStatus] = useState('');
   const [modelColor, setModelColor] = useState('#06b6d4');
   const [selectedPreset, setSelectedPreset] = useState('kristal');
+  const [useCube, setUseCube] = useState(true);
   const [stats, setStats] = useState({ vertices: 0, fileSize: '0 KB' });
   const fileInputRef = useRef(null);
 
@@ -478,6 +466,7 @@ export default function Home() {
     const file = e.target.files?.[0];
     if (file && file.name.toLowerCase().endsWith('.stl')) {
       setStlFile(file);
+      setUseCube(false);
       setExportStatus('');
       setStats({ vertices: 0, fileSize: `${(file.size / 1024).toFixed(1)} KB` });
     } else alert('Geçerli bir STL dosyası seçin!');
@@ -489,7 +478,7 @@ export default function Home() {
   }, []);
 
   const handleExportSTL = useCallback(() => {
-    if (!currentGeometry) { alert('Önce STL yükleyin!'); return; }
+    if (!currentGeometry) { alert('Önce model yükleyin!'); return; }
     try {
       setExportStatus('Export ediliyor...');
       const exporter = new STLExporter();
@@ -513,39 +502,44 @@ export default function Home() {
       <header className="border-b border-gray-800 bg-gray-900/80 backdrop-blur-md p-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-cyan-400">Palamut3D <span className="text-gray-500 text-sm font-mono">v1.3.0</span></h1>
+            <h1 className="text-xl font-bold tracking-tight text-cyan-400">Palamut3D <span className="text-gray-500 text-sm font-mono">v1.4.0</span></h1>
             <p className="text-xs text-gray-400 mt-1">3D Model Texturizer</p>
           </div>
-          <button onClick={() => setShowWireframe(!showWireframe)} className="px-4 py-2 text-xs font-mono bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded transition">
-            {showWireframe ? "Dolu" : "Tel Kafes"}
-          </button>
+          <div className="flex gap-2">
+            <button onClick={() => setUseCube(!useCube)} className="px-4 py-2 text-xs font-mono bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded transition">
+              {useCube ? "📦 Küp" : "📄 STL"}
+            </button>
+            <button onClick={() => setShowWireframe(!showWireframe)} className="px-4 py-2 text-xs font-mono bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded transition">
+              {showWireframe ? "Dolu" : "Tel"}
+            </button>
+          </div>
         </div>
       </header>
 
       <div className="flex-1 flex">
         <div className="flex-1 relative">
-          <Canvas camera={{ position: [0, 8, 8], fov: 50 }}>
+          <Canvas camera={{ position: [8, 8, 8], fov: 50 }}>
             <ambientLight intensity={0.6} />
             <directionalLight position={[10, 10, 5]} intensity={1} />
             <directionalLight position={[-10, -5, -5]} intensity={0.3} />
             <Suspense fallback={null}>
-              <STLModel file={stlFile} amplitude={amplitude} scale={scale} showWireframe={showWireframe} remeshQuality={remeshQuality} modelColor={modelColor} selectedPreset={selectedPreset} onGeometryReady={handleGeometryReady} />
+              <Model3D file={stlFile} amplitude={amplitude} scale={scale} showWireframe={showWireframe} remeshQuality={remeshQuality} modelColor={modelColor} selectedPreset={selectedPreset} useCube={useCube} onGeometryReady={handleGeometryReady} />
             </Suspense>
             <OrbitControls makeDefault />
           </Canvas>
         </div>
 
-        <aside className="w-80 bg-gray-900 border-l border-gray-800 p-4 space-y-4 overflow-y-auto">
+        <aside className="w-96 bg-gray-900 border-l border-gray-800 p-4 space-y-4 overflow-y-auto">
           <div>
-            <h2 className="text-sm font-bold text-gray-300 mb-3">DOSYA YÜKLEME</h2>
+            <h2 className="text-sm font-bold text-gray-300 mb-3">DOSYA</h2>
             <button onClick={() => fileInputRef.current?.click()} className="w-full py-2 px-3 bg-cyan-600 hover:bg-cyan-700 rounded text-sm transition">
-              {stlFile ? '✓ Yüklendi' : 'STL Yükle'}
+              {stlFile ? '✓ STL Yüklendi' : 'STL Yükle'}
             </button>
             <input ref={fileInputRef} type="file" accept=".stl" onChange={handleFileChange} className="hidden" />
           </div>
 
           <div className="pt-3 border-t border-gray-800">
-            <h2 className="text-sm font-bold text-gray-300 mb-3">İSTATİSTİKLER</h2>
+            <h2 className="text-sm font-bold text-gray-300 mb-3">İSTATİSTİK</h2>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-gray-800 p-2 rounded">
                 <p className="text-gray-400">Vertex</p>
@@ -559,9 +553,9 @@ export default function Home() {
           </div>
 
           <div className="pt-3 border-t border-gray-800">
-            <h2 className="text-sm font-bold text-gray-300 mb-3">STL EXPORT</h2>
+            <h2 className="text-sm font-bold text-gray-300 mb-3">EXPORT</h2>
             <button onClick={handleExportSTL} disabled={!currentGeometry} className={`w-full py-2 px-3 rounded text-sm transition ${currentGeometry ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>
-              {currentGeometry ? 'STL İndir' : 'Model Yok'}
+              STL İndir
             </button>
             {exportStatus && <p className="text-xs mt-2 text-center text-cyan-400">{exportStatus}</p>}
           </div>
@@ -578,16 +572,21 @@ export default function Home() {
             </div>
           </div>
 
+          {/* PRESET GRID - BumpMesh gibi gerçek thumbnail'lar */}
           <div className="pt-3 border-t border-gray-800">
-            <h2 className="text-sm font-bold text-gray-300 mb-3">PRESET ({presetList.length})</h2>
-            <div className="grid grid-cols-5 gap-1 max-h-48 overflow-y-auto">
+            <h2 className="text-sm font-bold text-gray-300 mb-3">KABARTMA DESEN HARİTASI (25)</h2>
+            <div className="grid grid-cols-6 gap-2 max-h-64 overflow-y-auto">
               {presetList.map(p => (
-                <button key={p.id} onClick={() => setSelectedPreset(p.id)} className={`aspect-square rounded text-xs ${selectedPreset === p.id ? 'bg-cyan-600 border-2 border-cyan-400' : 'bg-gray-800 border border-gray-700 hover:border-gray-500'}`} title={p.name}>
-                  {p.name.charAt(0)}
-                </button>
+                <PresetThumbnail
+                  key={p.id}
+                  presetId={p.id}
+                  name={p.name}
+                  isSelected={selectedPreset === p.id}
+                  onClick={() => setSelectedPreset(p.id)}
+                />
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Seçili: <span className="text-cyan-400">{presetList.find(p => p.id === selectedPreset)?.name}</span></p>
+            <p className="text-xs text-gray-500 mt-2">Seçili: <span className="text-cyan-400 font-bold">{presetList.find(p => p.id === selectedPreset)?.name}</span></p>
           </div>
 
           <div className="pt-3 border-t border-gray-800">
